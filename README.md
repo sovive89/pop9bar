@@ -1,73 +1,63 @@
-# Welcome to your Lovable project
+# PØP9 Bar — Gestão de Balcão
 
-## Project info
+## Stack
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- Vite + React 18 + TypeScript
+- React Router DOM
+- Tailwind CSS
+- API via `fetch` com fallback local (localStorage)
 
-## How can I edit this code?
+## Funcionalidades entregues
 
-There are several ways of editing your application.
+- **Tela inicial/dashboard** (`/dashboard`) com cards de visão operacional.
+- **CRUD de produtos** (`/products`) com criar, editar e excluir.
+- **Login/autenticação** (`/login`) com proteção de rotas privadas.
+- **Integração com API/backend**:
+  - se `VITE_API_BASE_URL` existir, usa endpoints REST (`/products`).
+  - sem backend configurado, usa fallback local para desenvolvimento.
+- **Deploy/build de produção** com `npm run build` e workflow de CI.
 
-**Use Lovable**
+## Como rodar localmente
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Abra: `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Variáveis de ambiente
 
-**Use GitHub Codespaces**
+Crie `.env` (opcional):
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+VITE_API_BASE_URL=https://sua-api.com
+```
 
-## What technologies are used for this project?
+Endpoints esperados:
 
-This project is built with:
+- `GET /products`
+- `POST /products`
+- `PUT /products/:id`
+- `DELETE /products/:id`
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Scripts
 
-## How can I deploy this project?
+- `npm run dev` — desenvolvimento
+- `npm run build` — build de produção
+- `npm run preview` — preview da build
+- `npm run lint` — lint
+- `npm run test` — testes (Vitest)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Deploy
 
-## Can I connect a custom domain to my Lovable project?
+### Build local de produção
 
-Yes, you can!
+```bash
+npm run build
+npm run preview
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### CI (GitHub Actions)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+O repositório inclui workflow que instala dependências, roda lint/test e build em pushes e PRs para `main`.
