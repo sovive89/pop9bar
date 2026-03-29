@@ -15,8 +15,17 @@ export function ProductsPage() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const totalStock = useMemo(() => products.reduce((acc, item) => acc + item.stock, 0), [products]);
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }),
+    [],
+  );
 
   function resetForm() {
     setForm(initialForm);
@@ -37,10 +46,17 @@ export function ProductsPage() {
     event.preventDefault();
     setSaving(true);
     setFormError(null);
+    setActionError(null);
 
     try {
       if (!form.name.trim()) {
         throw new Error("Informe o nome do produto.");
+      }
+      if (!Number.isFinite(form.price) || form.price < 0) {
+        throw new Error("Informe um preço válido (maior ou igual a zero).");
+      }
+      if (!Number.isFinite(form.stock) || form.stock < 0) {
+        throw new Error("Informe um estoque válido (maior ou igual a zero).");
       }
 
       if (editing) {
@@ -55,6 +71,21 @@ export function ProductsPage() {
       setFormError(message);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete(product: Product) {
+    const shouldDelete = window.confirm(`Deseja realmente excluir "${product.name}"?`);
+
+    if (!shouldDelete) return;
+
+    setActionError(null);
+
+    try {
+      await remove(product.id);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Não foi possível excluir o produto.";
+      setActionError(message);
     }
   }
 
@@ -140,7 +171,7 @@ export function ProductsPage() {
             {products.map((product) => (
               <tr className="border-t border-border" key={product.id}>
                 <td className="px-4 py-3">{product.name}</td>
-                <td className="px-4 py-3">R$ {product.price.toFixed(2)}</td>
+                <td className="px-4 py-3">{currencyFormatter.format(product.price)}</td>
                 <td className="px-4 py-3">{product.stock}</td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(product.updatedAt).toLocaleString("pt-BR")}</td>
                 <td className="px-4 py-3">
@@ -148,7 +179,7 @@ export function ProductsPage() {
                     <button className="rounded-md border border-border px-3 py-1" onClick={() => startEdit(product)} type="button">
                       Editar
                     </button>
-                    <button className="rounded-md border border-destructive px-3 py-1 text-destructive" onClick={() => void remove(product.id)} type="button">
+                    <button className="rounded-md border border-destructive px-3 py-1 text-destructive" onClick={() => void handleDelete(product)} type="button">
                       Excluir
                     </button>
                   </div>
@@ -159,6 +190,7 @@ export function ProductsPage() {
         </table>
       </div>
 
+      {actionError && <p className="text-sm text-destructive">{actionError}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </section>
   );
