@@ -17,6 +17,12 @@ export function AppShell() {
             <Link className="transition hover:text-foreground" to="/products">
               Produtos
             </Link>
+            <Link className="transition hover:text-foreground" to="/qr-acesso">
+              QR PWA
+            </Link>
+            <Link className="transition hover:text-foreground" to="/validacao">
+              Validação QR
+            </Link>
             <span className="hidden text-xs md:inline">{username}</span>
             <button className="rounded border border-border px-2 py-1 text-xs hover:text-foreground" onClick={logout} type="button">
               Sair
