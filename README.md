@@ -12,6 +12,13 @@
 - **Tela inicial/dashboard** (`/dashboard`) com cards de visão operacional.
 - **CRUD de produtos** (`/products`) com criar, editar e excluir.
 - **Login/autenticação** (`/login`) com proteção de rotas privadas.
+- **Fluxo do cliente por QR**:
+  - abertura de comanda (`/cliente`) com nome completo e celular BR;
+  - cardápio e carrinho (`/cliente/menu`);
+  - QR por item para validação operacional.
+- **Fluxo do gestor por QR**:
+  - validação de itens pendentes (`/gestor/validacao` ou `/validacao`);
+  - geração de QR de acesso ao PWA (`/pwa-qr` ou `/qr-acesso`).
 - **Integração com API/backend**:
   - se `VITE_API_BASE_URL` existir, usa endpoints REST (`/products`).
   - sem backend configurado, usa fallback local para desenvolvimento.
